@@ -26,6 +26,16 @@ namespace endo.io
         public int? HighBG { get; set; }
         public int? LowBG { get; set; }
 
+        // FOR TESTING
+        public BasalProfile(string name)
+        {
+            Name = name;
+            BasalRates = new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            TargetBG = null;
+            HighBG = null;
+            LowBG = null;
+        }
+
         public BasalProfile(string name, double[] basalRates, int? targetBG = null, int? highBG = null, int? lowBG = null) 
         {
             Name        = name;
