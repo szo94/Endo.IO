@@ -24,9 +24,9 @@ namespace endo.io
             double averageBG = events.Average(e => e.GlucoseValue);
             double timeInRange = GetTimeInRange(events, testProfile);
 
-            Console.WriteLine("Number of Readings: {0}",    events.Count);
-            Console.WriteLine("Average BG: {0:F0}",         averageBG);
-            Console.WriteLine("Time In Range: {0:P1}",      timeInRange);
+            Console.WriteLine($"Number of Readings: {events.Count}");
+            Console.WriteLine($"Average BG: {averageBG:F0}");
+            Console.WriteLine($"Time In Range: {timeInRange:P1}");
 
             Console.WriteLine("\nPress any key to continue");
             Console.ReadKey();
