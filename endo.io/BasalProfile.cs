@@ -4,13 +4,12 @@ namespace endo.io
 {
     internal class BasalProfile
     {
-        private const int       DEF_TARGET_BG   = 100;
-        private const double    MAX_BASAL_RATE  = 5.00;
-        private const double    DEF_BASAL_RATE  = 1.00;
+        public const double MAX_BASAL_RATE  = 5.00;
+        public const double DEF_BASAL_RATE  = 1.00;
 
         public string Name { get; set; }
 
-        private double[] basalRates;
+        private double[] basalRates = new double[24];
         public double[] BasalRates
         {
             get { return basalRates; }
@@ -23,14 +22,11 @@ namespace endo.io
             }
         }
 
-        public int TargetBG { get; set; }
-
+        public int? TargetBG { get; set; }
         public int? HighBG { get; set; }
-
         public int? LowBG { get; set; }
 
-        public BasalProfile(string name, double[] basalRates,
-            int targetBG = DEF_TARGET_BG, int? highBG = null, int? lowBG = null) 
+        public BasalProfile(string name, double[] basalRates, int? targetBG = null, int? highBG = null, int? lowBG = null) 
         {
             Name        = name;
             BasalRates  = basalRates;
