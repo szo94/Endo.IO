@@ -73,6 +73,7 @@
     <Compile Include="ClarityEvent.cs" />
     <Compile Include="ClarityEventMap.cs" />
     <Compile Include="BasalProfile.cs" />
+    <Compile Include="Event.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

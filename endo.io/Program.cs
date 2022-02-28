@@ -28,7 +28,7 @@ namespace endo.io
             Console.WriteLine("Average BG: {0:F0}",         averageBG);
             Console.WriteLine("Time In Range: {0:P1}",      timeInRange);
 
-            Console.WriteLine("Press any key to continue");
+            Console.WriteLine("\nPress any key to continue");
             Console.ReadKey();
         }
 
@@ -51,7 +51,7 @@ namespace endo.io
             return events;
         }
 
-        static double GetTimeInRange(List<ClarityEvent> events, BasalProfile basalProfile)
+        static double GetTimeInRange<T>(List<T> events, BasalProfile basalProfile) where T : Event
         {
             int readingsInRange = events.Count(e => e.GlucoseValue >= (basalProfile.LowBG ?? DEF_LOW_BG) &&
                                                     e.GlucoseValue <= (basalProfile.HighBG ?? DEF_HIGH_BG));
