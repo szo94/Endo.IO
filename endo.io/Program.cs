@@ -11,25 +11,22 @@ namespace endo.io
 {
     internal class Program
     {
-        public const int DEF_TARGET_BG = 100;
-        public const int DEF_LOW_BG = 70;
-        public const int DEF_HIGH_BG = 180;
+        public const int DEF_TARGET_BG  = 100;
+        public const int DEF_LOW_BG     = 70;
+        public const int DEF_HIGH_BG    = 180;
 
         static void Main(string[] args)
         {
-            BasalProfile profile1 = new BasalProfile("Profile 1",
-                new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 });
+            BasalProfile testProfile = new BasalProfile("Test Profile");
             
             List<ClarityEvent> events = ReadCleanedClarityExport("C:\\Users\\shlom\\Downloads\\SampleClarityExport_Cleaned.csv");
 
-            int numOfReadings = events.Count;
             double averageBG = events.Average(e => e.GlucoseValue);
-            double timeInRange = events.Count(e => e.GlucoseValue >= (profile1.LowBG ?? DEF_LOW_BG) &&
-                                                   e.GlucoseValue <= (profile1.HighBG ?? DEF_HIGH_BG)) / (double) numOfReadings;
+            double timeInRange = GetTimeInRange(events, testProfile);
 
-            Console.WriteLine($"Number of Readings: {numOfReadings}");
-            Console.WriteLine("Average BG: {0:F0}", averageBG);
-            Console.WriteLine("Time In Range: {0:P1}", timeInRange);
+            Console.WriteLine("Number of Readings: {0}",    events.Count);
+            Console.WriteLine("Average BG: {0:F0}",         averageBG);
+            Console.WriteLine("Time In Range: {0:P1}",      timeInRange);
 
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
@@ -52,6 +49,13 @@ namespace endo.io
             }
 
             return events;
+        }
+
+        static double GetTimeInRange(List<ClarityEvent> events, BasalProfile basalProfile)
+        {
+            int readingsInRange = events.Count(e => e.GlucoseValue >= (basalProfile.LowBG ?? DEF_LOW_BG) &&
+                                                    e.GlucoseValue <= (basalProfile.HighBG ?? DEF_HIGH_BG));
+            return (double) readingsInRange / events.Count;
         }
     }
 }
