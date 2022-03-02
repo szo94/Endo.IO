@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using CsvHelper;
 using System.Linq;
+using CsvHelper;
 using CsvHelper.TypeConversion;
 
 namespace endo.io
@@ -13,6 +13,7 @@ namespace endo.io
         private const int DEF_TARGET_BG = 100;
         private const int DEF_LOW_BG    = 70;
         private const int DEF_HIGH_BG   = 180;
+        private const int ADJ_OFFSET    = 1;
         private const int PAD           = 7;
 
         private static readonly string[] hour =
@@ -27,15 +28,18 @@ namespace endo.io
             
             List<ClarityEvent> events = ReadCleanedClarityExport("C:\\Users\\shlom\\Downloads\\SampleClarityExport_Cleaned.csv");
 
-            double      averageBG       = events.Average(e => e.GlucoseValue);
-            double      timeInRange     = GetTimeInRange(events, basalProfile);
-            double[]    averageByHour   = GetAverageByHour(events);
-            double[]    varianceByHour  = GetVarianceByHour(averageByHour);
+            double      averageBG           = events.Average(e => e.GlucoseValue);
+            double      timeInRange         = GetTimeInRange(events, basalProfile);
+            double[]    averageByHour       = GetAverageByHour(events);
+            double[]    varianceByHour      = GetVarianceByHour(averageByHour);
+            double[]    basalSuggestions    = GetBasalSuggestions(varianceByHour, basalProfile);
 
             Console.WriteLine(events.Count > 0 ? $"Copied {events.Count} events\n" : "Failed to copy events\n");
             PrintHeader();
             PrintAverageByHour(averageByHour);
             PrintVarianceByHour(varianceByHour);
+            PrintBasalRates(basalProfile.BasalRates);
+            PrintBasalSuggestions(basalSuggestions);
             Console.WriteLine();
             Console.WriteLine($"Number of Readings:{events.Count,8}");
             Console.WriteLine($"Average BG:{averageBG,16:F}");
@@ -85,27 +89,54 @@ namespace endo.io
             return varianceByHour;
         }
 
+        static double[] GetBasalSuggestions(double[] varianceByHour, BasalProfile bp)
+        {
+            double[] basalSuggestions = new double[24];
+            for (int i = 0; i < 24; i++)
+                basalSuggestions[i] = (varianceByHour[i] / (bp.TargetBG ?? DEF_TARGET_BG)) * (bp.BasalRates[i]);
+            return basalSuggestions;
+        }
+
         static void PrintHeader()
         {
+            Console.Write("             ");
             for (int i = 0; i < 24; i++)
-                Console.Write($"{hour[i],-PAD}");
-            Console.WriteLine();
-            for (int i = 0; i < 24 * PAD; i++)
+                Console.Write($"{hour[i],PAD}");
+            Console.Write("\n             ");
+            for (int i = 0; i < (24 * PAD); i++)
                 Console.Write('-');
             Console.WriteLine();
         }
 
         static void PrintAverageByHour(double[] averageByHour)
         {
+            Console.Write("Average      ");
             for (int i = 0; i < 24; i++)
-                Console.Write($"{averageByHour[i],-PAD:F1}");
+                Console.Write($"{averageByHour[i],PAD:F1}");
             Console.WriteLine();
         }
 
         static void PrintVarianceByHour(double[] varianceByHour)
         {
+            Console.Write("Variance     ");
             for (int i = 0; i < 24; i++)
-                Console.Write($"{varianceByHour[i],-PAD:+#.#;-#.#;0}");
+                Console.Write($"{varianceByHour[i],PAD:+#.#;-#.#;0}");
+            Console.WriteLine();
+        }
+
+        static void PrintBasalRates(double[] basalRates)
+        {
+            Console.Write("Basal Rates  ");
+            for (int i = 0; i < 24; i++)
+                Console.Write($"{basalRates[i],PAD:F1}");
+            Console.WriteLine();
+        }
+
+        static void PrintBasalSuggestions(double[] basalSuggestions)
+        {
+            Console.Write("Suggestions  ");
+            for (int i = 0; i < 24; i++)
+                Console.Write($"{basalSuggestions[i],PAD:+#.#;-#.#;0}");
             Console.WriteLine();
         }
     }

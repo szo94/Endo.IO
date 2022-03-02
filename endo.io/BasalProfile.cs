@@ -7,7 +7,7 @@
 
         public string Name { get; }
 
-        public double[] BasalRates { get; private set; }
+        public double[] BasalRates { get; }
 
         public int? TargetBG { get; }
         public int? HighBG { get; }
