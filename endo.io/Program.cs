@@ -33,6 +33,7 @@ namespace endo.io
             double      timeInRange     = GetTimeInRange(events, testProfile);
             double[]    averageByHour   = GetAverageByHour(events);
 
+            Console.WriteLine(events.Count > 0 ? $"Copied {events.Count} events\n" : "Failed to copy events\n");
             PrintHeader();
             PrintAverageByHour(averageByHour);
             PrintVarianceByHour(GetVarianceByHour(averageByHour));
@@ -56,9 +57,8 @@ namespace endo.io
                 try
                 {
                     events = csv.GetRecords<ClarityEvent>().ToList();
-                    Console.WriteLine($"Copied {events.Count} events");
                 }
-                catch (TypeConverterException ex) { Console.WriteLine("Failed to copy events"); }
+                catch (TypeConverterException ex) {}
             }
 
             return events;
