@@ -1,39 +1,26 @@
-﻿using System;
-
-namespace endo.io
+﻿namespace endo.io
 {
     internal class BasalProfile
     {
-        public const double MAX_BASAL_RATE  = 5.00;
-        public const double DEF_BASAL_RATE  = 1.00;
+        private const double MAX_BASAL_RATE  = 5.00;
+        private const double DEF_BASAL_RATE  = 1.00;
 
-        public string Name { get; set; }
+        public string Name { get; }
 
-        private double[] basalRates = new double[24];
-        public double[] BasalRates
-        {
-            get { return basalRates; }
-            set
-            {
-                for (int i = 0; i < 24; i++)
-                {
-                    basalRates[i] = (value[i] >= 0 && value[i] <= 5) ? Math.Round(value[i], 1) : DEF_BASAL_RATE;
-                }
-            }
-        }
+        public double[] BasalRates { get; private set; }
 
-        public int? TargetBG { get; set; }
-        public int? HighBG { get; set; }
-        public int? LowBG { get; set; }
+        public int? TargetBG { get; }
+        public int? HighBG { get; }
+        public int? LowBG { get; }
 
         // FOR TESTING
         public BasalProfile(string name)
         {
-            Name = name;
-            BasalRates = new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-            TargetBG = null;
-            HighBG = null;
-            LowBG = null;
+            Name        = name;
+            BasalRates  = new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            TargetBG    = null;
+            HighBG      = null;
+            LowBG       = null;
         }
 
         public BasalProfile(string name, double[] basalRates, int? targetBG = null, int? highBG = null, int? lowBG = null) 

@@ -6,8 +6,6 @@ using CsvHelper;
 using System.Linq;
 using CsvHelper.TypeConversion;
 
-// NOTE: expand console window to properly view output
-
 namespace endo.io
 {
     internal class Program
@@ -16,8 +14,8 @@ namespace endo.io
         private const int DEF_LOW_BG    = 70;
         private const int DEF_HIGH_BG   = 180;
         private const int PAD           = 7;
-        
-        static readonly string[] hour =
+
+        private static readonly string[] hour =
         {
             "12AM", "1AM", "2AM", "3AM", "4AM", "5AM", "6AM", "7AM", "8AM", "9AM", "10AM", "11AM",
             "12PM", "1PM", "2PM", "3PM", "4PM", "5PM", "6PM", "7PM", "8PM", "9PM", "10PM", "11PM"
@@ -25,18 +23,19 @@ namespace endo.io
 
         static void Main(string[] args)
         {
-            BasalProfile testProfile = new BasalProfile("Test Profile");
+            BasalProfile basalProfile = new BasalProfile("Profile1");
             
             List<ClarityEvent> events = ReadCleanedClarityExport("C:\\Users\\shlom\\Downloads\\SampleClarityExport_Cleaned.csv");
 
             double      averageBG       = events.Average(e => e.GlucoseValue);
-            double      timeInRange     = GetTimeInRange(events, testProfile);
+            double      timeInRange     = GetTimeInRange(events, basalProfile);
             double[]    averageByHour   = GetAverageByHour(events);
+            double[]    varianceByHour  = GetVarianceByHour(averageByHour);
 
             Console.WriteLine(events.Count > 0 ? $"Copied {events.Count} events\n" : "Failed to copy events\n");
             PrintHeader();
             PrintAverageByHour(averageByHour);
-            PrintVarianceByHour(GetVarianceByHour(averageByHour));
+            PrintVarianceByHour(varianceByHour);
             Console.WriteLine();
             Console.WriteLine($"Number of Readings:{events.Count,8}");
             Console.WriteLine($"Average BG:{averageBG,16:F}");
@@ -82,7 +81,8 @@ namespace endo.io
 
         static double[] GetVarianceByHour(double[] averageByHour)
         {
-            return averageByHour.Select(a => a - DEF_TARGET_BG).ToArray();
+            double[] varianceByHour = averageByHour.Select(a => a - DEF_TARGET_BG).ToArray();
+            return varianceByHour;
         }
 
         static void PrintHeader()
