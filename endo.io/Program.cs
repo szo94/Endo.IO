@@ -4,17 +4,18 @@ using System.Globalization;
 using System.IO;
 using CsvHelper;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
 using CsvHelper.TypeConversion;
+
+// NOTE: expand console window to properly view output
 
 namespace endo.io
 {
     internal class Program
     {
-        const int DEF_TARGET_BG = 100;
-        const int DEF_LOW_BG = 70;
-        const int DEF_HIGH_BG = 180;
+        private const int DEF_TARGET_BG = 100;
+        private const int DEF_LOW_BG    = 70;
+        private const int DEF_HIGH_BG   = 180;
+        private const int PAD           = 7;
         
         static readonly string[] hour =
         {
@@ -32,11 +33,13 @@ namespace endo.io
             double      timeInRange     = GetTimeInRange(events, testProfile);
             double[]    averageByHour   = GetAverageByHour(events);
 
-            Console.WriteLine($"Number of Readings: {events.Count}");
-            Console.WriteLine($"Average BG: {averageBG:F}");
-            Console.WriteLine($"Time In Range: {timeInRange:P1}");
-            Console.WriteLine("Average By Hour:");
+            PrintHeader();
             PrintAverageByHour(averageByHour);
+            PrintVarianceByHour(GetVarianceByHour(averageByHour));
+            Console.WriteLine();
+            Console.WriteLine($"Number of Readings:{events.Count,8}");
+            Console.WriteLine($"Average BG:{averageBG,16:F}");
+            Console.WriteLine($"Time In Range:{timeInRange,13:P1}");
 
             Console.WriteLine("\nPress any key to continue");
             Console.ReadKey();
@@ -70,22 +73,40 @@ namespace endo.io
 
         static double[] GetAverageByHour<T>(List<T> events) where T : Event
         {
-            double[] AverageByHour = events
+            double[] averageByHour = events
                 .GroupBy(e => e.Timestamp.Hour)
                 .Select(grp => grp.Average(e => e.GlucoseValue))
                 .ToArray();
-            return AverageByHour;
+            return averageByHour;
         }
 
-        static void PrintAverageByHour(double[] hourlyAverages)
+        static double[] GetVarianceByHour(double[] averageByHour)
+        {
+            return averageByHour.Select(a => a - DEF_TARGET_BG).ToArray();
+        }
+
+        static void PrintHeader()
         {
             for (int i = 0; i < 24; i++)
-                Console.Write($"{hour[i],-6}");
+                Console.Write($"{hour[i],-PAD}");
             Console.WriteLine();
-            for (int i = 0; i < (24 * 6); i++) { Console.Write("-"); }
+            for (int i = 0; i < 24 * PAD; i++)
+                Console.Write('-');
             Console.WriteLine();
+        }
+
+        static void PrintAverageByHour(double[] averageByHour)
+        {
             for (int i = 0; i < 24; i++)
-                Console.Write($"{hourlyAverages[i],-6:F1}");
+                Console.Write($"{averageByHour[i],-PAD:F1}");
+            Console.WriteLine();
+        }
+
+        static void PrintVarianceByHour(double[] varianceByHour)
+        {
+            for (int i = 0; i < 24; i++)
+                Console.Write($"{varianceByHour[i],-PAD:+#.#;-#.#;0}");
+            Console.WriteLine();
         }
     }
 }
