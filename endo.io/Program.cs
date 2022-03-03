@@ -16,7 +16,7 @@ namespace endo.io
         private const int ADJ_OFFSET    = 1;
         private const int PAD           = 7;
 
-        private static readonly string[] hour =
+        private static readonly string[] HOUR =
         {
             "12AM", "1AM", "2AM", "3AM", "4AM", "5AM", "6AM", "7AM", "8AM", "9AM", "10AM", "11AM",
             "12PM", "1PM", "2PM", "3PM", "4PM", "5PM", "6PM", "7PM", "8PM", "9PM", "10PM", "11PM"
@@ -24,9 +24,10 @@ namespace endo.io
 
         static void Main(string[] args)
         {
-            BasalProfile basalProfile = new BasalProfile("Profile1");
+            Profile basalProfile = new Profile("Profile1");
             
             List<ClarityEvent> events = ReadCleanedClarityExport("C:\\Users\\shlom\\Downloads\\SampleClarityExport_Cleaned.csv");
+            Console.WriteLine(events.Count > 0 ? $"Copied {events.Count} events\n" : "Failed to copy events\n");
 
             double      averageBG           = events.Average(e => e.GlucoseValue);
             double      timeInRange         = GetTimeInRange(events, basalProfile);
@@ -34,7 +35,6 @@ namespace endo.io
             double[]    varianceByHour      = GetVarianceByHour(averageByHour);
             double[]    basalSuggestions    = GetBasalSuggestions(varianceByHour, basalProfile);
 
-            Console.WriteLine(events.Count > 0 ? $"Copied {events.Count} events\n" : "Failed to copy events\n");
             PrintHeader();
             PrintAverageByHour(averageByHour);
             PrintVarianceByHour(varianceByHour);
@@ -67,7 +67,7 @@ namespace endo.io
             return events;
         }
 
-        static double GetTimeInRange<T>(List<T> events, BasalProfile basalProfile) where T : Event
+        static double GetTimeInRange<T>(List<T> events, Profile basalProfile) where T : Event
         {
             int readingsInRange = events.Count(e => e.GlucoseValue >= (basalProfile.LowBG ?? DEF_LOW_BG) &&
                                                     e.GlucoseValue <= (basalProfile.HighBG ?? DEF_HIGH_BG));
@@ -89,11 +89,11 @@ namespace endo.io
             return varianceByHour;
         }
 
-        static double[] GetBasalSuggestions(double[] varianceByHour, BasalProfile bp)
+        static double[] GetBasalSuggestions(double[] varianceByHour, Profile profile)
         {
             double[] basalSuggestions = new double[24];
             for (int i = 0; i < 24; i++)
-                basalSuggestions[i] = (varianceByHour[i] / (bp.TargetBG ?? DEF_TARGET_BG)) * (bp.BasalRates[i]);
+                basalSuggestions[i] = (varianceByHour[i] / (profile.TargetBG ?? DEF_TARGET_BG)) * (profile.BasalRates[i]);
             return basalSuggestions;
         }
 
@@ -101,7 +101,7 @@ namespace endo.io
         {
             Console.Write("             ");
             for (int i = 0; i < 24; i++)
-                Console.Write($"{hour[i],PAD}");
+                Console.Write($"{HOUR[i],PAD}");
             Console.Write("\n             ");
             for (int i = 0; i < (24 * PAD); i++)
                 Console.Write('-');
