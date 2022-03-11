@@ -13,7 +13,7 @@ namespace endo.io
         private const int DEF_TARGET_BG = 100;
         private const int DEF_LOW_BG    = 70;
         private const int DEF_HIGH_BG   = 180;
-        private const int ADJ_OFFSET    = 1;
+        private const int DEF_OFFSET    = 1;
         private const int PAD           = 7;
 
         private static readonly string[] HOUR =
@@ -25,8 +25,10 @@ namespace endo.io
         static void Main(string[] args)
         {
             Profile basalProfile = new Profile("Profile1");
-            
-            List<ClarityEvent> events = ReadCleanedClarityExport("C:\\Users\\shlom\\Downloads\\SampleClarityExport_Cleaned.csv");
+
+            string filePath = "";
+
+            List<ClarityEvent> events = ReadCleanedClarityExport(filePath);
             Console.WriteLine(events.Count > 0 ? $"Copied {events.Count} events\n" : "Failed to copy events\n");
 
             double      averageBG           = events.Average(e => e.GlucoseValue);
