@@ -1,19 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using CsvHelper;
-using CsvHelper.TypeConversion;
 
 namespace endo.io
 {
     internal class Program
     {
-        private const int DEF_TARGET_BG = 100;
-        private const int DEF_LOW_BG    = 70;
-        private const int DEF_HIGH_BG   = 180;
-        private const int DEF_OFFSET    = 1;
         private const int PAD           = 7;
 
         private static readonly string[] HOUR =
@@ -24,79 +14,29 @@ namespace endo.io
 
         static void Main(string[] args)
         {
-            PatientProfile basalProfile = new PatientProfile("Profile1");
+            PatientProfile profile = new PatientProfile("Profile1");
 
-            string filePath = "";
+            string filePath = "C:\\Users\\shlom\\source\\repos\\szo94\\endo.io\\endo.io\\TestFiles\\SampleClarityExport_Cleaned.csv";
 
-            List<ClarityEvent> events = ReadCleanedClarityExport(filePath);
-            Console.WriteLine(events.Count > 0 ? $"Copied {events.Count} events\n" : "Failed to copy events\n");
+            LogAnalyzer analyzer = new LogAnalyzer(profile, filePath);
 
-            double      averageBG           = events.Average(e => e.GlucoseValue);
-            double      timeInRange         = GetTimeInRange(events, basalProfile);
-            double[]    averageByHour       = GetAverageByHour(events);
-            double[]    varianceByHour      = GetVarianceByHour(averageByHour);
-            double[]    basalSuggestions    = GetBasalSuggestions(varianceByHour, basalProfile);
+            double      timeInRange         = analyzer.TimeInRange;
+            double[]    averageByHour       = analyzer.AverageByHour;
+            double[]    varianceByHour      = analyzer.VarianceByHour;
+            double[]    basalSuggestions    = analyzer.BasalSuggestions;
 
             PrintHeader();
             PrintAverageByHour(averageByHour);
             PrintVarianceByHour(varianceByHour);
-            PrintBasalRates(basalProfile.BasalRates);
+            PrintBasalRates(profile.BasalRates);
             PrintBasalSuggestions(basalSuggestions);
             Console.WriteLine();
-            Console.WriteLine($"Number of Readings:{events.Count,8}");
-            Console.WriteLine($"Average BG:{averageBG,16:F}");
+            Console.WriteLine($"Number of Readings:{analyzer.EventLog.Count,8}");
+            Console.WriteLine($"Average BG:{analyzer.AverageBG,16:F}");
             Console.WriteLine($"Time In Range:{timeInRange,13:P1}");
 
             Console.WriteLine("\nPress any key to continue");
             Console.ReadKey();
-        }
-
-        static List<ClarityEvent> ReadCleanedClarityExport(string filePath)
-        {
-            List<ClarityEvent> events = null;
-
-            using (var reader = new StreamReader(filePath))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-            {
-                csv.Context.RegisterClassMap<ClarityEventMap>();
-                try
-                {
-                    events = csv.GetRecords<ClarityEvent>().ToList();
-                }
-                catch (TypeConverterException ex) {}
-            }
-
-            return events;
-        }
-
-        static double GetTimeInRange<T>(List<T> events, PatientProfile basalProfile) where T : Event
-        {
-            int readingsInRange = events.Count(e => e.GlucoseValue >= (basalProfile.LowBG ?? DEF_LOW_BG) &&
-                                                    e.GlucoseValue <= (basalProfile.HighBG ?? DEF_HIGH_BG));
-            return (double) readingsInRange / events.Count;
-        }
-
-        static double[] GetAverageByHour<T>(List<T> events) where T : Event
-        {
-            double[] averageByHour = events
-                .GroupBy(e => e.Timestamp.Hour)
-                .Select(grp => grp.Average(e => e.GlucoseValue))
-                .ToArray();
-            return averageByHour;
-        }
-
-        static double[] GetVarianceByHour(double[] averageByHour)
-        {
-            double[] varianceByHour = averageByHour.Select(a => a - DEF_TARGET_BG).ToArray();
-            return varianceByHour;
-        }
-
-        static double[] GetBasalSuggestions(double[] varianceByHour, PatientProfile profile)
-        {
-            double[] basalSuggestions = new double[24];
-            for (int i = 0; i < 24; i++)
-                basalSuggestions[i] = (varianceByHour[i] / (profile.TargetBG ?? DEF_TARGET_BG)) * (profile.BasalRates[i]);
-            return basalSuggestions;
         }
 
         static void PrintHeader()

@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="ClarityEvent.cs" />
     <Compile Include="ClarityEventMap.cs" />
+    <Compile Include="LogAnalyzer.cs" />
     <Compile Include="PatientProfile.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="Program.cs" />
@@ -86,6 +87,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="TestFiles\SampleClarityExport_Cleaned.csv" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
