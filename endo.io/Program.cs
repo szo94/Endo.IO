@@ -24,7 +24,7 @@ namespace endo.io
 
         static void Main(string[] args)
         {
-            Profile basalProfile = new Profile("Profile1");
+            PatientProfile basalProfile = new PatientProfile("Profile1");
 
             string filePath = "";
 
@@ -69,7 +69,7 @@ namespace endo.io
             return events;
         }
 
-        static double GetTimeInRange<T>(List<T> events, Profile basalProfile) where T : Event
+        static double GetTimeInRange<T>(List<T> events, PatientProfile basalProfile) where T : Event
         {
             int readingsInRange = events.Count(e => e.GlucoseValue >= (basalProfile.LowBG ?? DEF_LOW_BG) &&
                                                     e.GlucoseValue <= (basalProfile.HighBG ?? DEF_HIGH_BG));
@@ -91,7 +91,7 @@ namespace endo.io
             return varianceByHour;
         }
 
-        static double[] GetBasalSuggestions(double[] varianceByHour, Profile profile)
+        static double[] GetBasalSuggestions(double[] varianceByHour, PatientProfile profile)
         {
             double[] basalSuggestions = new double[24];
             for (int i = 0; i < 24; i++)

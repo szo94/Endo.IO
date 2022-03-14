@@ -1,6 +1,6 @@
 ﻿namespace endo.io
 {
-    internal class Profile
+    internal class PatientProfile
     {
         private const double MAX_BASAL_RATE  = 5.00;
         private const double DEF_BASAL_RATE  = 1.00;
@@ -14,7 +14,7 @@
         public int? LowBG { get; }
 
         // FOR TESTING
-        public Profile(string name)
+        public PatientProfile(string name)
         {
             Name        = name;
             BasalRates  = new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
@@ -23,7 +23,7 @@
             LowBG       = null;
         }
 
-        public Profile(string name, double[] basalRates, int? targetBG = null, int? highBG = null, int? lowBG = null) 
+        public PatientProfile(string name, double[] basalRates, int? targetBG = null, int? highBG = null, int? lowBG = null) 
         {
             Name        = name;
             BasalRates  = basalRates;
