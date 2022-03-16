@@ -1,24 +1,23 @@
 ﻿using System;
+using System.Globalization;
 
 namespace endo.io
 {
     internal class Program
     {
-        private const int PAD = 7;
-
         private static readonly string[] HOUR =
         {
             "12AM", "1AM", "2AM", "3AM", "4AM", "5AM", "6AM", "7AM", "8AM", "9AM", "10AM", "11AM",
             "12PM", "1PM", "2PM", "3PM", "4PM", "5PM", "6PM", "7PM", "8PM", "9PM", "10PM", "11PM"
         };
+        private const int PAD = 7;
+        private const string TEST_FILE = "C:\\Users\\shlom\\source\\repos\\szo94\\endo.io\\endo.io\\TestFiles\\SampleClarityExport_Cleaned.csv";
 
         static void Main()
         {
             PatientProfile profile = new PatientProfile("Profile1");
 
-            string filePath = "C:\\Users\\shlom\\source\\repos\\szo94\\endo.io\\endo.io\\TestFiles\\SampleClarityExport_Cleaned.csv";
-
-            LogAnalyzer analyzer = new LogAnalyzer(profile, filePath);
+            LogAnalyzer analyzer = new LogAnalyzer(profile, TEST_FILE);
             if (analyzer.EventLog != null)
             {
                 double timeInRange          = analyzer.TimeInRange;
@@ -27,10 +26,10 @@ namespace endo.io
                 double[] basalSuggestions   = analyzer.BasalSuggestions;
 
                 PrintHeader();
-                PrintAverageByHour(averageByHour);
-                PrintVarianceByHour(varianceByHour);
-                PrintBasalRates(profile.BasalRates);
-                PrintBasalSuggestions(basalSuggestions);
+                PrintRow("Average",     analyzer.AverageByHour,     v => $"{v,PAD:F1}");
+                PrintRow("Variance",    analyzer.VarianceByHour,    v => $"{v,PAD:F1}");
+                PrintRow("Basal Rates", profile.BasalRates,         v => $"{v,PAD:F1}");
+                PrintRow("Suggestions", analyzer.BasalSuggestions,  v => $"{v,PAD:+#.#;-#.#;0}");
                 Console.WriteLine();
                 Console.WriteLine($"Number of Readings:{analyzer.EventLog.Count,8}");
                 Console.WriteLine($"Average BG:{analyzer.AverageBG,16:F}");
@@ -41,46 +40,22 @@ namespace endo.io
             Console.ReadKey();        
         }
 
-        static void PrintHeader()
+        private static void PrintHeader()
         {
             Console.Write("             ");
-            for (int i = 0; i < 24; i++)
-                Console.Write($"{HOUR[i],PAD}");
+            foreach (string s in HOUR)
+                Console.Write($"{s,PAD}");
             Console.Write("\n             ");
             for (int i = 0; i < (24 * PAD); i++)
                 Console.Write('-');
             Console.WriteLine();
         }
 
-        static void PrintAverageByHour(double[] averageByHour)
+        private static void PrintRow(string rowTitle, double[] rowData, Func<double, string> format)
         {
-            Console.Write("Average      ");
-            for (int i = 0; i < 24; i++)
-                Console.Write($"{averageByHour[i],PAD:F1}");
-            Console.WriteLine();
-        }
-
-        static void PrintVarianceByHour(double[] varianceByHour)
-        {
-            Console.Write("Variance     ");
-            for (int i = 0; i < 24; i++)
-                Console.Write($"{varianceByHour[i],PAD:+#.#;-#.#;0}");
-            Console.WriteLine();
-        }
-
-        static void PrintBasalRates(double[] basalRates)
-        {
-            Console.Write("Basal Rates  ");
-            for (int i = 0; i < 24; i++)
-                Console.Write($"{basalRates[i],PAD:F1}");
-            Console.WriteLine();
-        }
-
-        static void PrintBasalSuggestions(double[] basalSuggestions)
-        {
-            Console.Write("Suggestions  ");
-            for (int i = 0; i < 24; i++)
-                Console.Write($"{basalSuggestions[i],PAD:+#.#;-#.#;0}");
+            Console.Write($"{rowTitle,-13}");
+            foreach (var v in rowData)
+                Console.Write(format(v));
             Console.WriteLine();
         }
     }
