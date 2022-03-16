@@ -62,21 +62,12 @@ namespace endo.io
 
         private void Analyze()
         {
-            // get overall average BG
-            AverageBG = EventLog.Average(e => e.GlucoseValue);
-
-            // get overall time in range
-            TimeInRange = EventLog.Count(e => e.GlucoseValue >= (Profile.LowBG ?? DEF_LOW_BG) &&
-                                              e.GlucoseValue <= (Profile.HighBG ?? DEF_HIGH_BG));
-
-            // get average BG by hour
-            AverageByHour = GetAverageByHour();
-
-            // get variance by hour
-            VarianceByHour = GetVarianceByHour(AverageByHour);
-
-            // get basal suggestions
-            BasalSuggestions = GetBasalSuggestions(VarianceByHour);
+            AverageBG           = EventLog.Average(e => e.GlucoseValue);
+            TimeInRange         = EventLog.Count(e => e.GlucoseValue >= (Profile.LowBG ?? DEF_LOW_BG) &&
+                                                      e.GlucoseValue <= (Profile.HighBG ?? DEF_HIGH_BG));
+            AverageByHour       = GetAverageByHour();
+            VarianceByHour      = GetVarianceByHour(AverageByHour);
+            BasalSuggestions    = GetBasalSuggestions(VarianceByHour);
         }
 
         private double[] GetAverageByHour()
