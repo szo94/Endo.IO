@@ -16,6 +16,13 @@ namespace endo.io
         private const int DEF_HIGH_BG = 180;
         private const int DEF_OFFSET = 1;
 
+        public static readonly string[] HOURS =
+        {
+            "12AM", "1AM", "2AM", "3AM", "4AM", "5AM", "6AM", "7AM", "8AM", "9AM", "10AM", "11AM",
+            "12PM", "1PM", "2PM", "3PM", "4PM", "5PM", "6PM", "7PM", "8PM", "9PM", "10PM", "11PM"
+        };
+
+
         public PatientProfile Profile { get; }
         public List<ClarityEvent> EventLog { get; private set; }
         public double AverageBG { get; private set; }
