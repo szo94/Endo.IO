@@ -4,7 +4,7 @@ namespace endo.io
 {
     internal class Program
     {
-        private const int PAD           = 7;
+        private const int PAD = 7;
 
         private static readonly string[] HOUR =
         {
@@ -12,31 +12,33 @@ namespace endo.io
             "12PM", "1PM", "2PM", "3PM", "4PM", "5PM", "6PM", "7PM", "8PM", "9PM", "10PM", "11PM"
         };
 
-        static void Main(string[] args)
+        static void Main()
         {
             PatientProfile profile = new PatientProfile("Profile1");
 
             string filePath = "C:\\Users\\shlom\\source\\repos\\szo94\\endo.io\\endo.io\\TestFiles\\SampleClarityExport_Cleaned.csv";
 
             LogAnalyzer analyzer = new LogAnalyzer(profile, filePath);
+            if (analyzer.EventLog != null)
+            {
+                double timeInRange          = analyzer.TimeInRange;
+                double[] averageByHour      = analyzer.AverageByHour;
+                double[] varianceByHour     = analyzer.VarianceByHour;
+                double[] basalSuggestions   = analyzer.BasalSuggestions;
 
-            double      timeInRange         = analyzer.TimeInRange;
-            double[]    averageByHour       = analyzer.AverageByHour;
-            double[]    varianceByHour      = analyzer.VarianceByHour;
-            double[]    basalSuggestions    = analyzer.BasalSuggestions;
-
-            PrintHeader();
-            PrintAverageByHour(averageByHour);
-            PrintVarianceByHour(varianceByHour);
-            PrintBasalRates(profile.BasalRates);
-            PrintBasalSuggestions(basalSuggestions);
-            Console.WriteLine();
-            Console.WriteLine($"Number of Readings:{analyzer.EventLog.Count,8}");
-            Console.WriteLine($"Average BG:{analyzer.AverageBG,16:F}");
-            Console.WriteLine($"Time In Range:{timeInRange,13:P1}");
+                PrintHeader();
+                PrintAverageByHour(averageByHour);
+                PrintVarianceByHour(varianceByHour);
+                PrintBasalRates(profile.BasalRates);
+                PrintBasalSuggestions(basalSuggestions);
+                Console.WriteLine();
+                Console.WriteLine($"Number of Readings:{analyzer.EventLog.Count,8}");
+                Console.WriteLine($"Average BG:{analyzer.AverageBG,16:F}");
+                Console.WriteLine($"Time In Range:{timeInRange,13:P1}");
+            }
 
             Console.WriteLine("\nPress any key to continue");
-            Console.ReadKey();
+            Console.ReadKey();        
         }
 
         static void PrintHeader()

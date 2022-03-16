@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using CsvHelper;
 using CsvHelper.TypeConversion;
+using NUnit.Framework;
 
 namespace endo.io
 {
@@ -15,8 +16,8 @@ namespace endo.io
         private const int DEF_HIGH_BG = 180;
         private const int DEF_OFFSET = 1;
 
-        public PatientProfile Profile { get; private set; }
-        public List<Event> EventLog { get; private set; }
+        public PatientProfile Profile { get; }
+        public List<ClarityEvent> EventLog { get; private set; }
         public double AverageBG { get; private set; }
         public double TimeInRange { get; private set; }
         public double[] AverageByHour { get; private set; }
@@ -26,29 +27,30 @@ namespace endo.io
         public LogAnalyzer(PatientProfile profile, string filepath)
         {
             Profile = profile;
-            EventLog = ReadCleanedClarityExport(filepath);
-            if (EventLog != null)
+            try
+            {
+                ReadCleanedClarityExport(filepath);
+                Console.WriteLine($"Copied {EventLog.Count} events\n");
                 Analyze();
+            }
+            catch (IOException)
+            {
+                Console.WriteLine($"Failed to read file");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to copy events: {ex.GetType()}");
+            }
         }
 
-        private List<Event> ReadCleanedClarityExport(string filePath)
+        private void ReadCleanedClarityExport(string filePath)
         {
-            List<Event> eventLog = null;
-
             using (var reader = new StreamReader(filePath))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
                 csv.Context.RegisterClassMap<ClarityEventMap>();
-                try
-                {
-                    eventLog = csv.GetRecords<Event>().ToList();
-                }
-                catch (TypeConverterException ex) { }
+                EventLog = csv.GetRecords<ClarityEvent>().ToList();
             }
-
-            Console.WriteLine(eventLog is {Count: > 0} ? $"Copied {eventLog.Count} events\n" : "Failed to copy events\n");
-
-            return eventLog;
         }
 
         private void Analyze()
