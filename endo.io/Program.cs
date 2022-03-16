@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 
 namespace endo.io
 {
@@ -10,8 +12,8 @@ namespace endo.io
         {
             PatientProfile profile = new PatientProfile("Profile1");
 
-            string testFile =
-                @"C:\Users\shlom\source\repos\szo94\endo.io\endo.io\TestFiles\SampleClarityExport_Cleaned.csv";
+            string testFile = Path.Combine(Assembly.GetExecutingAssembly().Location,
+                @"..\..\..\TestFiles\SampleClarityExport_Cleaned.csv");
 
             LogAnalyzer analyzer = new LogAnalyzer(profile, testFile);
 
