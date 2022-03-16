@@ -63,7 +63,7 @@ namespace endo.io
         {
             AverageBG           = EventLog.Average(e => e.GlucoseValue);
             TimeInRange         = EventLog.Count(e => e.GlucoseValue >= (Profile.LowBG ?? DEF_LOW_BG) &&
-                                                      e.GlucoseValue <= (Profile.HighBG ?? DEF_HIGH_BG));
+                                    e.GlucoseValue <= (Profile.HighBG ?? DEF_HIGH_BG)) / (double) EventLog.Count;
             AverageByHour       = GetAverageByHour();
             VarianceByHour      = GetVarianceByHour(AverageByHour);
             BasalSuggestions    = GetBasalSuggestions(VarianceByHour);
