@@ -37,7 +37,6 @@ namespace endo.io
             try
             {
                 ReadCleanedClarityExport(filepath);
-                Console.WriteLine($"Copied {EventLog.Count} events\n");
                 Analyze();
             }
             catch (IOException)
