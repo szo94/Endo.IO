@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -6,25 +7,26 @@ namespace endo.io
 {
     internal class Program
     {
-        private const int CP = 7; // column padding
+        private const int COL_WIDTH = 7;
 
-        static void Main()
+        private static void Main()
         {
-            PatientProfile profile = new PatientProfile("Profile1");
-
-            string testFile = Path.Combine(Assembly.GetExecutingAssembly().Location,
+            string testFilePath = Path.Combine(Assembly.GetExecutingAssembly().Location,
                 @"..\..\..\TestFiles\SampleClarityExport_Cleaned.csv");
 
-            LogAnalyzer analyzer = new LogAnalyzer(profile, testFile);
+            PatientProfile profile = new PatientProfile("Profile1");
+            LogAnalyzer analyzer = new LogAnalyzer(profile, testFilePath);
 
             if (analyzer.EventLog != null)
             {
-                PrintRow("",            LogAnalyzer.HOURS,          v => $"{v,CP}");
-                Console.WriteLine(new string('-', 24 * CP + 13));
-                PrintRow("Average",     analyzer.AverageByHour,     v => $"{v,CP:F1}");
-                PrintRow("Variance",    analyzer.VarianceByHour,    v => $"{v,CP:F1}");
-                PrintRow("Basal Rates", profile.BasalRates,         v => $"{v,CP:F1}");
-                PrintRow("Suggestions", analyzer.BasalSuggestions,  v => $"{v,CP:+#.#;-#.#;0}");
+                PrintRow("", LogAnalyzer.HOURS, v => $"{v,COL_WIDTH}");
+                Console.WriteLine(new string('-', 24 * COL_WIDTH + 13));
+
+                PrintRow("Average",     analyzer.AverageByHour,     v => $"{v,COL_WIDTH:F1}");
+                PrintRow("Variance",    analyzer.VarianceByHour,    v => $"{v,COL_WIDTH:F1}");
+                PrintRow("Basal Rates", profile.BasalRates,         v => $"{v,COL_WIDTH:F1}");
+                PrintRow("Suggestions", analyzer.BasalSuggestions,  v => $"{v,COL_WIDTH:+#.#;-#.#;0}");
+
                 Console.WriteLine();
                 Console.WriteLine($"Number of Readings:{analyzer.EventLog.Count,8}");
                 Console.WriteLine($"Average BG:{analyzer.AverageBG,16:F}");
@@ -35,7 +37,7 @@ namespace endo.io
             Console.ReadKey();        
         }
 
-        private static void PrintRow<T>(string rowTitle, T[] rowData, Func<T, string> format)
+        private static void PrintRow<T>(string rowTitle, IEnumerable<T> rowData, Func<T, string> format)
         {
             Console.Write($"{rowTitle,-13}");
             foreach (var v in rowData)
