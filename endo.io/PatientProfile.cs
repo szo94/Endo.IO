@@ -6,9 +6,7 @@
         private const double DEF_BASAL_RATE  = 1.00;
 
         public string Name { get; }
-
         public double[] BasalRates { get; }
-
         public int? TargetBG { get; }
         public int? HighBG { get; }
         public int? LowBG { get; }
