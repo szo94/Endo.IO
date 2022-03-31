@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using CsvHelper;
 
 namespace endo.io
 {
@@ -15,12 +10,6 @@ namespace endo.io
         private const int DEF_HIGH_BG = 180;
         private const int OFFSET = 1;
 
-        public static readonly string[] HOURS =
-        {
-            "12AM", "1AM", "2AM", "3AM", "4AM", "5AM", "6AM", "7AM", "8AM", "9AM", "10AM", "11AM",
-            "12PM", "1PM", "2PM", "3PM", "4PM", "5PM", "6PM", "7PM", "8PM", "9PM", "10PM", "11PM"
-        };
-
         public PatientProfile Profile { get; }
         public List<ClarityEvent> EventLog { get; }
         public double AverageBG { get; private set; }
@@ -29,28 +18,11 @@ namespace endo.io
         public double[] VarianceByHour { get; private set; }
         public double[] BasalSuggestions { get; private set; }
 
-        public LogAnalyzer(PatientProfile profile, string filePath)
+        public LogAnalyzer(PatientProfile profile, List<ClarityEvent> eventLog)
         {
             Profile = profile;
-
-            try
-            {
-                using (var reader = new StreamReader(filePath))
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-                {
-                    csv.Context.RegisterClassMap<ClarityEventMap>();
-                    EventLog = csv.GetRecords<ClarityEvent>().ToList();
-                }
-                Analyze();
-            }
-            catch (IOException)
-            {
-                Console.WriteLine($"Failed to read file");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Failed to copy events: {ex.GetType()}");
-            }
+            EventLog = eventLog;
+            Analyze();
         }
 
         private void Analyze()

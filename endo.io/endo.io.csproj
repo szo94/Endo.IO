@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="ClarityEvent.cs" />
     <Compile Include="ClarityEventMap.cs" />
+    <Compile Include="ClarityExportReader.cs" />
     <Compile Include="LogAnalyzer.cs" />
     <Compile Include="PatientProfile.cs" />
     <Compile Include="Event.cs" />
