@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using CsvHelper;
 
 namespace endo.io
 {
@@ -22,28 +18,11 @@ namespace endo.io
         public double[] VarianceByHour { get; private set; }
         public double[] BasalSuggestions { get; private set; }
 
-        public LogAnalyzer(PatientProfile profile, string filePath)
+        public LogAnalyzer(PatientProfile profile, List<ClarityEvent> eventLog)
         {
             Profile = profile;
-
-            try
-            {
-                using (var reader = new StreamReader(filePath))
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-                {
-                    csv.Context.RegisterClassMap<ClarityEventMap>();
-                    EventLog = csv.GetRecords<ClarityEvent>().ToList();
-                }
-                Analyze();
-            }
-            catch (IOException)
-            {
-                Console.WriteLine($"Failed to read file");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Failed to copy events: {ex.GetType()}");
-            }
+            EventLog = eventLog;
+            Analyze();
         }
 
         private void Analyze()
