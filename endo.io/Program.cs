@@ -25,7 +25,7 @@ namespace endo.io
 
             if (analyzer.EventLog != null)
             {
-                PrintRow<string>("", HEADERS, v => $"{v,COL_WIDTH}");
+                PrintRow("", HEADERS, v => $"{v,COL_WIDTH}");
                 Console.WriteLine(new string('-', 24 * COL_WIDTH + 13));
 
                 PrintRow("Average",     analyzer.AverageByHour,     v => $"{v,COL_WIDTH:F1}");
