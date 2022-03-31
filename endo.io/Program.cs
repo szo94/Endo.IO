@@ -9,7 +9,7 @@ namespace endo.io
     {
         private const int COL_WIDTH = 7;
 
-        public static readonly string[] HEADERS =
+        private static string[] HEADERS =
         {
             "12AM", "1AM", "2AM", "3AM", "4AM", "5AM", "6AM", "7AM", "8AM", "9AM", "10AM", "11AM",
             "12PM", "1PM", "2PM", "3PM", "4PM", "5PM", "6PM", "7PM", "8PM", "9PM", "10PM", "11PM"
@@ -25,9 +25,8 @@ namespace endo.io
 
             if (analyzer.EventLog != null)
             {
-                PrintRow("", HEADERS, v => $"{v,COL_WIDTH}");
+                PrintRow("",            HEADERS,                    v => $"{v,COL_WIDTH}");
                 Console.WriteLine(new string('-', 24 * COL_WIDTH + 13));
-
                 PrintRow("Average",     analyzer.AverageByHour,     v => $"{v,COL_WIDTH:F1}");
                 PrintRow("Variance",    analyzer.VarianceByHour,    v => $"{v,COL_WIDTH:F1}");
                 PrintRow("Basal Rates", profile.BasalRates,         v => $"{v,COL_WIDTH:F1}");
