@@ -10,7 +10,7 @@ namespace endo.io
         private const int DEF_HIGH_BG = 180;
         private const int OFFSET = 1;
 
-        public PatientProfile Profile { get; }
+        public UserProfile Profile { get; }
         public List<ClarityEvent> EventLog { get; }
         public double AverageBG { get; private set; }
         public double TimeInRange { get; private set; }
@@ -18,7 +18,7 @@ namespace endo.io
         public double[] VarianceByHour { get; private set; }
         public double[] BasalSuggestions { get; private set; }
 
-        public LogAnalyzer(PatientProfile profile, List<ClarityEvent> eventLog)
+        public LogAnalyzer(UserProfile profile, List<ClarityEvent> eventLog)
         {
             Profile = profile;
             EventLog = eventLog;

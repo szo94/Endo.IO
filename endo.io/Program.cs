@@ -20,7 +20,7 @@ namespace endo.io
             string testFilePath = Path.Combine(Assembly.GetExecutingAssembly().Location,
                 @"..\..\..\TestFiles\SampleClarityExport_Cleaned.csv");
 
-            PatientProfile profile = new PatientProfile("Profile1");
+            UserProfile profile = new UserProfile("Profile1");
             ClarityExportReader reader = new ClarityExportReader(testFilePath);
             List<ClarityEvent> eventLog = null;
 
