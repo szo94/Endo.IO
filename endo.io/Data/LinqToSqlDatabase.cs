@@ -7,21 +7,27 @@ namespace endo.io.Data
     {
         private DataClasses1DataContext db = new DataClasses1DataContext();
 
+        public override bool UserExists(string userName)
+        {
+            return db.Users.Any(u => u.UserName.ToLower() == userName.ToLower());
+        }
+
         public override bool VerifyLoginCredentials(string userName, string password)
         {
-            return Instance.db.Users.Any(u => u.UserName.ToLower() == userName && u.Password == password);
+            return db.Users.Any(u => u.UserName.ToLower() == userName.ToLower() &&
+                                     u.Password == password);
         }
 
         public override UserProfile GetUserProfile(string userName)
         {
             // fetch user
-            var user = Instance.db.Users
+            var user = db.Users
                 .Where(u => u.UserName == userName)
                 .Select(u => new { u.UserName, u.FirstName, u.TargetBg, u.HighBg, u.LowBg })
                 .First();
 
             // fetch basal rates
-            var basalRates = Instance.db.BasalRates
+            var basalRates = db.BasalRates
                 .Where(u => u.UserName == userName)
                 .OrderBy(u => u.Hour)
                 .Select(u => u.Rate)

@@ -8,6 +8,8 @@ namespace endo.io.Data
         private static readonly Lazy<T> instance = new Lazy<T>(Activator.CreateInstance<T>);
         public static T Instance => instance.Value;
 
+        public abstract bool UserExists(string userName);
+
         public abstract bool VerifyLoginCredentials(string userName, string password);
 
         public abstract UserProfile GetUserProfile(string userName);

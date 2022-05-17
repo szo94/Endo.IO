@@ -1,33 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
+using System.Windows.Forms;
 using endo.io.Data;
+using endo.io.Testing;
+using static endo.io.Constants.Constants;
 
 namespace endo.io
 {
     internal class Program
     {
-        private const int COL_WIDTH = 7;
+        // get reference to database object (singleton)
+        static LinqToSqlDatabase db = LinqToSqlDatabase.Instance;
 
-        private static readonly string[] HEADERS =
-        {
-            "12AM", "1AM", "2AM", "3AM", "4AM", "5AM", "6AM", "7AM", "8AM", "9AM", "10AM", "11AM",
-            "12PM", "1PM", "2PM", "3PM", "4PM", "5PM", "6PM", "7PM", "8PM", "9PM", "10PM", "11PM"
-        };
-
+        [STAThread]
         private static void Main()
         {
-            // TEST VALUES (will come from user input)
-            string filePath = Path.Combine(Assembly.GetExecutingAssembly().Location,
-                @"..\..\..\TestFiles\SampleClarityExport_Cleaned.csv");
-            string userName = "SOchs";
+            // get username
+            Console.WriteLine("Welcome to Endo.IO!\n");
+            Console.Write("Enter username: ");
+            string userName = Console.ReadLine();
+            while (!db.UserExists(userName))
+            {
+                Console.WriteLine("User not found.\nPlease enter a valid username: ");
+                userName = Console.ReadLine();
+            }
 
-            // get reference to database object (singleton)
-            LinqToSqlDatabase db = LinqToSqlDatabase.Instance;
+            // get password
+            Console.Write("Enter password: ");
+            string password = Console.ReadLine();
+            while (!db.VerifyLoginCredentials(userName, password))
+            {
+                Console.WriteLine("Password incorrect.\nPlease try again: ");
+                userName = Console.ReadLine();
+            }
 
             // fetch user profile from database
             UserProfile profile = db.GetUserProfile(userName);
+
+            // open file explorer for user to select input file
+            string filePath = GetInputFilePath();
 
             // read clarity export
             ClarityExportReader reader = new ClarityExportReader(filePath);
@@ -39,27 +51,43 @@ namespace endo.io
             catch (Exception ex)
             {
                 Console.WriteLine(ex is IOException ? "Failed to read file" : $"Failed to copy events: {ex.GetType()}");
-                Environment.Exit(1);
             }
 
-            LogAnalyzer analyzer = new LogAnalyzer(profile, eventLog);
+            if (eventLog != null)
+            {
+                // analyze event data
+                LogAnalyzer analyzer = new LogAnalyzer(profile, eventLog);
 
-            PrintRow("", HEADERS, v => $"{v,COL_WIDTH}");
-            Console.WriteLine(new string('-', 24 * COL_WIDTH + 13));
-            PrintRow("Average",     analyzer.AverageByHour,     v => $"{v,COL_WIDTH:F1}");
-            PrintRow("Variance",    analyzer.VarianceByHour,    v => $"{v,COL_WIDTH:F1}");
-            PrintRow("Basal Rates", profile.BasalRates,         v => $"{v,COL_WIDTH:F1}");
-            PrintRow("Suggestions", analyzer.BasalSuggestions,  v => $"{v,COL_WIDTH:+#.#;-#.#;0}");
-
-            Console.WriteLine();
-            Console.WriteLine($"Number of Readings:{analyzer.EventLog.Count,8}");
-            Console.WriteLine($"Average BG:{analyzer.AverageBG,16:F}");
-            Console.WriteLine($"Time In Range:{analyzer.TimeInRange,13:P1}");
+                // print results to console
+                PrintRow("", HEADERS, v => $"{v,COL_WIDTH}");
+                Console.WriteLine(new string('-', 24 * COL_WIDTH + 13));
+                PrintRow("Average", analyzer.AverageByHour, v => $"{v,COL_WIDTH:F1}");
+                PrintRow("Variance", analyzer.VarianceByHour, v => $"{v,COL_WIDTH:F1}");
+                PrintRow("Basal Rates", profile.BasalRates, v => $"{v,COL_WIDTH:F1}");
+                PrintRow("Suggestions", analyzer.BasalSuggestions, v => $"{v,COL_WIDTH:+#.#;-#.#;0}");
+                Console.WriteLine();
+                Console.WriteLine($"Number of Readings:{analyzer.EventLog.Count,8}");
+                Console.WriteLine($"Average BG:{analyzer.AverageBG,16:F}");
+                Console.WriteLine($"Time In Range:{analyzer.TimeInRange,13:P1}");
+            }
 
             Console.WriteLine("\nPress any key to continue");
             Console.ReadKey();        
         }
 
+        private static string GetInputFilePath()
+        {
+            string filePath = "";
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Title = "Open Clarity Export";
+            ofd.Filter = "CSV Files |*.csv";
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                filePath = ofd.FileName;
+            }
+            return filePath;
+        }
+        
         private static void PrintRow<T>(string rowTitle, IEnumerable<T> rowData, Func<T, string> format)
         {
             Console.Write($"{rowTitle,-13}");

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using CsvHelper;
+using endo.io.Data;
 
 namespace endo.io
 {
