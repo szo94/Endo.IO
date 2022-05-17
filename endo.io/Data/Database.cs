@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace endo.io.Data
+namespace Endo.IO.Data
 {
     internal abstract class Database<T> where T : Database<T>
     {

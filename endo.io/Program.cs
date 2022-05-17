@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-using endo.io.Data;
-using static endo.io.Constants.Constants;
+using Endo.IO.Data;
+using static Endo.IO.Constants.Constants;
 
-namespace endo.io
+namespace Endo.IO
 {
     internal class Program
     {

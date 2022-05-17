@@ -1,4 +1,4 @@
-﻿namespace endo.io.Constants
+﻿namespace Endo.IO.Constants
 {
     public class Constants
     {

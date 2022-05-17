@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 
-namespace endo.io.Testing
+namespace Endo.IO.Testing
 {
     internal class TestValues
     {

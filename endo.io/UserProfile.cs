@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace endo.io
+namespace Endo.IO
 {
     internal class UserProfile
     {
