@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using endo.io.Data;
 
 namespace endo.io
 {
@@ -17,20 +18,27 @@ namespace endo.io
 
         private static void Main()
         {
-            string testFilePath = Path.Combine(Assembly.GetExecutingAssembly().Location,
+            // TEST VALUES (will come from user input)
+            string filePath = Path.Combine(Assembly.GetExecutingAssembly().Location,
                 @"..\..\..\TestFiles\SampleClarityExport_Cleaned.csv");
+            string userName = "SOchs";
 
-            UserProfile profile = new UserProfile("Profile1");
-            ClarityExportReader reader = new ClarityExportReader(testFilePath);
+            // get reference to database object (singleton)
+            LinqToSqlDatabase db = LinqToSqlDatabase.Instance;
+
+            // fetch user profile from database
+            UserProfile profile = db.GetUserProfile(userName);
+
+            // read clarity export
+            ClarityExportReader reader = new ClarityExportReader(filePath);
             List<ClarityEvent> eventLog = null;
-
             try
             {
                 eventLog = reader.ReadFile();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex is IOException ? $"Failed to read file" : $"Failed to copy events: {ex.GetType()}");
+                Console.WriteLine(ex is IOException ? "Failed to read file" : $"Failed to copy events: {ex.GetType()}");
                 Environment.Exit(1);
             }
 

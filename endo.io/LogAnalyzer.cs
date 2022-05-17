@@ -5,12 +5,9 @@ namespace endo.io
 {
     internal class LogAnalyzer
     {
-        private const int DEF_TARGET_BG = 100;
-        private const int DEF_LOW_BG = 70;
-        private const int DEF_HIGH_BG = 180;
-        private const int OFFSET = 1;
+        private const int ADJ_OFFSET_HRS = 1;
 
-        public UserProfile Profile { get; }
+        private readonly UserProfile userProfile;
         public List<ClarityEvent> EventLog { get; }
         public double AverageBG { get; private set; }
         public double TimeInRange { get; private set; }
@@ -20,7 +17,7 @@ namespace endo.io
 
         public LogAnalyzer(UserProfile profile, List<ClarityEvent> eventLog)
         {
-            Profile = profile;
+            userProfile = profile;
             EventLog = eventLog;
             Analyze();
         }
@@ -28,8 +25,8 @@ namespace endo.io
         private void Analyze()
         {
             AverageBG           = EventLog.Average(e => e.GlucoseValue);
-            TimeInRange         = EventLog.Count(e => e.GlucoseValue >= (Profile.LowBG ?? DEF_LOW_BG) &&
-                                    e.GlucoseValue <= (Profile.HighBG ?? DEF_HIGH_BG)) / (double) EventLog.Count;
+            TimeInRange         = EventLog.Count(e => e.GlucoseValue >= userProfile.LowBg &&
+                                    e.GlucoseValue <= userProfile.HighBg) / (double) EventLog.Count;
             AverageByHour       = GetAverageByHour();
             VarianceByHour      = GetVarianceByHour(AverageByHour);
             BasalSuggestions    = GetBasalSuggestions(VarianceByHour);
@@ -46,7 +43,7 @@ namespace endo.io
 
         private double[] GetVarianceByHour(double[] averageByHour)
         {
-            double[] varianceByHour = averageByHour.Select(a => a - DEF_TARGET_BG).ToArray();
+            double[] varianceByHour = averageByHour.Select(a => a - userProfile.TargetBg).ToArray();
             return varianceByHour;
         }
 
@@ -55,8 +52,8 @@ namespace endo.io
             double[] basalSuggestions = new double[24];
             for (int i = 0; i < 23; i++)
             {
-                int targetHour = (i - OFFSET + 24) % 24; // offset -1 hrs
-                basalSuggestions[targetHour] = (varianceByHour[i] / (Profile.TargetBG ?? DEF_TARGET_BG)) * Profile.BasalRates[i];
+                int targetHour = (i - ADJ_OFFSET_HRS + 24) % 24;
+                basalSuggestions[targetHour] = varianceByHour[i] / userProfile.TargetBg * (double) userProfile.BasalRates[i];
             }
 
             return basalSuggestions;
