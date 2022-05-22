@@ -39,29 +39,21 @@ namespace Endo.IO
             // fetch user profile from database
             UserProfile profile = db.GetUserProfile(userName);
 
-            // open file explorer and let user select input file
+            // get file path for input file
             string filePath = OpenFileDialog();
 
-            // read clarity export
+            // attempt to read and process file
             ClarityExportReader reader = new ClarityExportReader(filePath);
             try
             {
+                // read file
                 List<ClarityEvent> eventLog = reader.ReadFile();
 
                 // analyze event data
                 LogAnalyzer analyzer = new LogAnalyzer(profile, eventLog);
 
-                // print results to console
-                PrintRow("", HEADERS, v => $"{v,COL_WIDTH}");
-                Console.WriteLine(new string('-', 24 * COL_WIDTH + 13));
-                PrintRow("Average", analyzer.AverageByHour, v => $"{v,COL_WIDTH:F1}");
-                PrintRow("Variance", analyzer.VarianceByHour, v => $"{v,COL_WIDTH:F1}");
-                PrintRow("Basal Rates", profile.BasalRates, v => $"{v,COL_WIDTH:F1}");
-                PrintRow("Suggestions", analyzer.BasalSuggestions, v => $"{v,COL_WIDTH:+#.#;-#.#;0}");
-                Console.WriteLine();
-                Console.WriteLine($"Number of Readings:{analyzer.EventLog.Count,8}");
-                Console.WriteLine($"Average BG:{analyzer.AverageBG,16:F}");
-                Console.WriteLine($"Time In Range:{analyzer.TimeInRange,13:P1}");
+                // print results
+                PrintResultsGraph(profile, analyzer);
             }
             catch (Exception ex)
             {
@@ -73,6 +65,7 @@ namespace Endo.IO
             Console.ReadKey();        
         }
 
+        // open file explore for user to select input file, return file path
         private static string OpenFileDialog()
         {
             string filePath = "";
@@ -88,6 +81,21 @@ namespace Endo.IO
             return filePath;
         }
         
+        // print results in the form of a graph to console
+        private static void PrintResultsGraph(UserProfile profile, LogAnalyzer analyzer)
+        {
+            PrintRow("", HEADERS, v => $"{v,COL_WIDTH}");
+            Console.WriteLine(new string('-', 24 * COL_WIDTH + 13));
+            PrintRow("Average", analyzer.AverageByHour, v => $"{v,COL_WIDTH:F1}");
+            PrintRow("Variance", analyzer.VarianceByHour, v => $"{v,COL_WIDTH:F1}");
+            PrintRow("Basal Rates", profile.BasalRates, v => $"{v,COL_WIDTH:F1}");
+            PrintRow("Suggestions", analyzer.BasalSuggestions, v => $"{v,COL_WIDTH:+#.#;-#.#;0}");
+            Console.WriteLine();
+            Console.WriteLine($"Number of Readings:{analyzer.EventLog.Count,8}");
+            Console.WriteLine($"Average BG:{analyzer.AverageBG,16:F}");
+            Console.WriteLine($"Time In Range:{analyzer.TimeInRange,13:P1}");
+        }
+
         // print graph row to console specifying row name, data, and cell format
         private static void PrintRow<T>(string rowTitle, IEnumerable<T> rowData, Func<T, string> format)
         {
