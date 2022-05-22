@@ -82,12 +82,12 @@
     <Compile Include="Data\ClarityEvent.cs" />
     <Compile Include="Data\ClarityEventMap.cs" />
     <Compile Include="ClarityExportReader.cs" />
-    <Compile Include="Data\LinqToSqlDatabase.cs" />
-    <Compile Include="Data\Database.cs" />
-    <Compile Include="DataClasses1.designer.cs">
+    <Compile Include="Data\LinqToSqlDatabaseConnection.cs" />
+    <Compile Include="Data\DatabaseConnection.cs" />
+    <Compile Include="DataClasses.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DataClasses1.dbml</DependentUpon>
+      <DependentUpon>DataClasses.dbml</DependentUpon>
     </Compile>
     <Compile Include="LogAnalyzer.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -103,13 +103,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="DataClasses1.dbml">
+    <None Include="DataClasses.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>DataClasses1.designer.cs</LastGenOutput>
+      <LastGenOutput>DataClasses.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="DataClasses1.dbml.layout">
-      <DependentUpon>DataClasses1.dbml</DependentUpon>
+    <None Include="DataClasses.dbml.layout">
+      <DependentUpon>DataClasses.dbml</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

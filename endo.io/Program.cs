@@ -10,8 +10,8 @@ namespace Endo.IO
 {
     internal class Program
     {
-        // reference to database
-        static LinqToSqlDatabase db = LinqToSqlDatabase.Instance;
+        // get reference to database connection
+        static LinqToSqlDatabaseConnection db = LinqToSqlDatabaseConnection.Instance;
 
         [STAThread]
         private static void Main()
@@ -40,7 +40,7 @@ namespace Endo.IO
             UserProfile profile = db.GetUserProfile(userName);
 
             // open file explorer and let user select input file
-            string filePath = SelectInputFile();
+            string filePath = OpenFileDialog();
 
             // read clarity export
             ClarityExportReader reader = new ClarityExportReader(filePath);
@@ -73,7 +73,7 @@ namespace Endo.IO
             Console.ReadKey();        
         }
 
-        private static string SelectInputFile()
+        private static string OpenFileDialog()
         {
             string filePath = "";
             OpenFileDialog ofd = new OpenFileDialog();
@@ -88,6 +88,7 @@ namespace Endo.IO
             return filePath;
         }
         
+        // print graph row to console specifying row name, data, and cell format
         private static void PrintRow<T>(string rowTitle, IEnumerable<T> rowData, Func<T, string> format)
         {
             Console.Write($"{rowTitle,-13}");

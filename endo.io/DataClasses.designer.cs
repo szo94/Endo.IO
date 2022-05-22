@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Endo.IO
+namespace endo.io
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;
@@ -22,7 +22,7 @@ namespace Endo.IO
 	using System;
 	
 	
-	[Database(Name="Endo.IO")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="Endo.IO")]
 	public partial class DataClasses1DataContext : System.Data.Linq.DataContext
 	{
 		
@@ -85,7 +85,7 @@ namespace Endo.IO
 		}
 	}
 	
-	[Table(Name="dbo.BasalRates")]
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.BasalRates")]
 	public partial class BasalRate : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -117,7 +117,7 @@ namespace Endo.IO
 			OnCreated();
 		}
 		
-		[Column(Storage="_Hour", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Hour", DbType="Int NOT NULL", IsPrimaryKey=true)]
 		public int Hour
 		{
 			get
@@ -137,7 +137,7 @@ namespace Endo.IO
 			}
 		}
 		
-		[Column(Storage="_Rate", DbType="Decimal(3,2)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Rate", DbType="Decimal(3,2)")]
 		public System.Nullable<decimal> Rate
 		{
 			get
@@ -157,7 +157,7 @@ namespace Endo.IO
 			}
 		}
 		
-		[Column(Storage="_UserName", DbType="VarChar(15) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="VarChar(15) NOT NULL", CanBeNull=false)]
 		public string UserName
 		{
 			get
@@ -181,7 +181,7 @@ namespace Endo.IO
 			}
 		}
 		
-		[Association(Name="User_BasalRate", Storage="_User", ThisKey="UserName", OtherKey="UserName", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_BasalRate", Storage="_User", ThisKey="UserName", OtherKey="UserName", IsForeignKey=true)]
 		public User User
 		{
 			get
@@ -236,7 +236,7 @@ namespace Endo.IO
 		}
 	}
 	
-	[Table(Name="dbo.Users")]
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Users")]
 	public partial class User : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -288,7 +288,7 @@ namespace Endo.IO
 			OnCreated();
 		}
 		
-		[Column(Storage="_UserName", DbType="VarChar(15) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="VarChar(15) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
 		public string UserName
 		{
 			get
@@ -308,7 +308,7 @@ namespace Endo.IO
 			}
 		}
 		
-		[Column(Storage="_Password", DbType="VarChar(25) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Password", DbType="VarChar(25) NOT NULL", CanBeNull=false)]
 		public string Password
 		{
 			get
@@ -328,7 +328,7 @@ namespace Endo.IO
 			}
 		}
 		
-		[Column(Storage="_CreateDate", DbType="DateTime NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime NOT NULL")]
 		public System.DateTime CreateDate
 		{
 			get
@@ -348,7 +348,7 @@ namespace Endo.IO
 			}
 		}
 		
-		[Column(Storage="_MaxBasalRate", DbType="Decimal(3,2)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaxBasalRate", DbType="Decimal(3,2)")]
 		public System.Nullable<decimal> MaxBasalRate
 		{
 			get
@@ -368,7 +368,7 @@ namespace Endo.IO
 			}
 		}
 		
-		[Column(Storage="_TargetBg", DbType="Int")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TargetBg", DbType="Int")]
 		public System.Nullable<int> TargetBg
 		{
 			get
@@ -388,7 +388,7 @@ namespace Endo.IO
 			}
 		}
 		
-		[Column(Storage="_HighBg", DbType="Int")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HighBg", DbType="Int")]
 		public System.Nullable<int> HighBg
 		{
 			get
@@ -408,7 +408,7 @@ namespace Endo.IO
 			}
 		}
 		
-		[Column(Storage="_LowBg", DbType="Int")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LowBg", DbType="Int")]
 		public System.Nullable<int> LowBg
 		{
 			get
@@ -428,7 +428,7 @@ namespace Endo.IO
 			}
 		}
 		
-		[Column(Storage="_FirstName", DbType="VarChar(25) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstName", DbType="VarChar(25) NOT NULL", CanBeNull=false)]
 		public string FirstName
 		{
 			get
@@ -448,7 +448,7 @@ namespace Endo.IO
 			}
 		}
 		
-		[Association(Name="User_BasalRate", Storage="_BasalRates", ThisKey="UserName", OtherKey="UserName")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_BasalRate", Storage="_BasalRates", ThisKey="UserName", OtherKey="UserName")]
 		public EntitySet<BasalRate> BasalRates
 		{
 			get
