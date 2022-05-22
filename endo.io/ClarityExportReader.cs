@@ -3,9 +3,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using CsvHelper;
-using endo.io.Data;
+using Endo.IO.Data;
 
-namespace endo.io
+namespace Endo.IO
 {
     internal class ClarityExportReader
     {

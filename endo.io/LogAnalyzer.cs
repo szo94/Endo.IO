@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using endo.io.Data;
+using Endo.IO.Data;
 
-namespace endo.io
+namespace Endo.IO
 {
     internal class LogAnalyzer
     {

@@ -1,4 +1,4 @@
-﻿namespace endo.io.Data
+﻿namespace Endo.IO.Data
 {
     internal class ClarityEvent : Event
     {

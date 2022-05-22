@@ -39,7 +39,7 @@ namespace endo.io
     #endregion
 		
 		public DataClasses1DataContext() : 
-				base(global::endo.io.Properties.Settings.Default.Endo_IOConnectionString, mappingSource)
+				base(global::Endo.IO.Properties.Settings.Default.Endo_IOConnectionString, mappingSource)
 		{
 			OnCreated();
 		}

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace endo.io.Data
+namespace Endo.IO.Data
 {
     internal class Event
     {

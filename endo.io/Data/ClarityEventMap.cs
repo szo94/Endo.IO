@@ -1,6 +1,6 @@
 ﻿using CsvHelper.Configuration;
 
-namespace endo.io.Data
+namespace Endo.IO.Data
 {
     internal class ClarityEventMap : ClassMap<ClarityEvent>
     {
