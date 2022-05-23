@@ -1,30 +1,31 @@
-﻿using NUnit.Framework;
+﻿using Endo.IO.Data;
+using NUnit.Framework;
 using System;
 using System.IO;
 
 namespace Endo.IO.Testing
 {
     [TestFixture]
-    public class ClarityExportReaderTests
+    public class DexcomClarityExportHandlerTests
     {
         [Test]
         public void ReadFileOnProperlyFormattedFileReturnsListOfEvents()
         {
-            ClarityExportReader reader = new ClarityExportReader(Path.Combine(
+            ILogHandler logHandler = new DexcomClarityExportHandler(Path.Combine(
                 Environment.CurrentDirectory,
                 @"Endo.IO\Resources\",
                 "SampleClarityExport_Cleaned.csv"));
-            Assert.IsNotEmpty(reader.ReadFile());
+            Assert.IsNotEmpty(logHandler.GetLog().Events);
         }
 
         [Test]
         public void ReadFileOnImproperlyFormattedFileThrowsCsvHelperReaderException()
         {
-            ClarityExportReader reader = new ClarityExportReader(Path.Combine(
+            ILogHandler logHandler = new DexcomClarityExportHandler(Path.Combine(
                 Environment.CurrentDirectory,
                 @"Endo.IO\Resources\",
                 "SampleClarityExport_Uncleaned.csv"));
-            Assert.Throws<CsvHelper.ReaderException>(() => reader.ReadFile());
+            Assert.Throws<CsvHelper.ReaderException>(() => logHandler.GetLog());
         }
     }
 }

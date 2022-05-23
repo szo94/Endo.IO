@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Windows.Forms;
 using Endo.IO.Data;
 using static Endo.IO.Constants.Constants;
 
@@ -39,15 +37,12 @@ namespace Endo.IO
             // fetch user profile from database
             UserProfile profile = db.GetUserProfile(userName);
 
-            // get file path for input file
-            string filePath = GetFilePath();
-
             // attempt to read and process file
-            ClarityExportReader reader = new ClarityExportReader(filePath);
+            ILogHandler logHandler = new DexcomClarityExportHandler();
             try
             {
-                // read file
-                List<ClarityEvent> eventLog = reader.ReadFile();
+                // get log
+                IEventLog eventLog = logHandler.GetLog();
 
                 // analyze event data
                 LogAnalyzer analyzer = new LogAnalyzer(profile, eventLog);
@@ -57,28 +52,11 @@ namespace Endo.IO
             }
             catch (Exception ex)
             {
-                Console.WriteLine((ex is IOException ? "Failed to read file " : "Failed to copy events ")
-                                  + ex.GetType());
+                Console.WriteLine($"Failed to get log: {ex.GetType()}");
             }
 
             Console.WriteLine("\nPress any key to continue");
             Console.ReadKey();        
-        }
-
-        // open file explore for user to select input file, return file path
-        private static string GetFilePath()
-        {
-            string filePath = "";
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Title = "Open Clarity Export";
-            ofd.InitialDirectory =
-                Path.Combine(Assembly.GetExecutingAssembly().Location, @"..\..\..\Resources");
-            ofd.Filter = "CSV Files |*.csv";
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                filePath = ofd.FileName;
-            }
-            return filePath;
         }
         
         // print results in the form of a graph to console

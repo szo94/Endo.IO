@@ -1,7 +1,18 @@
-﻿namespace Endo.IO.Data
+﻿using System;
+
+namespace Endo.IO.Data
 {
-    internal class ClarityEvent : Event
+    internal class DexcomClarityEvent : Event
     {
+        public DexcomClarityEvent()
+        {
+        }
+        
+        public DexcomClarityEvent(int index, DateTime timestamp, int glucoseValue)
+            : base(index, timestamp, glucoseValue)
+        {
+        }
+
         public  string  EventType { get; set; }
         public  string  EventSubtype { get; set; }
         public  string  PatientInfo { get; set; }

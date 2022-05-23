@@ -83,14 +83,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\Constants.cs" />
-    <Compile Include="Data\ClarityEvent.cs" />
-    <Compile Include="Data\ClarityEventMap.cs" />
-    <Compile Include="ClarityExportReader.cs" />
+    <Compile Include="Data\DexcomClarityExport.cs" />
+    <Compile Include="Data\DexcomClarityEvent.cs" />
+    <Compile Include="Data\DexcomClarityExportHandler.cs" />
     <Compile Include="Data\DataClasses.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataClasses.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Data\ILogHandler.cs" />
+    <Compile Include="Data\IEventLog.cs" />
     <Compile Include="Data\LinqToSqlDatabaseConnection.cs" />
     <Compile Include="Data\DatabaseConnection.cs" />
     <Compile Include="LogAnalyzer.cs" />
@@ -99,7 +101,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="UnitTests\ClarityExportReaderTests.cs" />
+    <Compile Include="UnitTests\DexcomClarityExportHandlerTests.cs" />
     <Compile Include="UserProfile.cs" />
     <Compile Include="Data\Event.cs" />
     <Compile Include="Program.cs" />
