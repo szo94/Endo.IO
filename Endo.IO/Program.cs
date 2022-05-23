@@ -37,7 +37,7 @@ namespace Endo.IO
             UserProfile profile = db.GetUserProfile(userName);
 
             // attempt to read and process file
-            ILogHandler logHandler = new DexcomClarityExportHandler();
+            IEventLogGetter logHandler = new DexcomClarityExportReader();
             try
             {
                 // get log
