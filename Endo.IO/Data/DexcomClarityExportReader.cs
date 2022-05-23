@@ -10,31 +10,33 @@ using Endo.IO.Data;
 
 namespace Endo.IO
 {
-    internal class DexcomClarityExportHandler : ILogHandler
+    internal class DexcomClarityExportReader : IEventLogGetter
     {
         private readonly string filePath;
-        
-        public DexcomClarityExportHandler(string filePath)
+
+        // constructor with parameter for file path, used only in unit tests
+        public DexcomClarityExportReader(string filePath)
         {
             this.filePath = filePath;
         }
 
-        public DexcomClarityExportHandler()
+        // parameterless contrsuctor, prompts user to select from file explorer
+        public DexcomClarityExportReader()
         {
-            // if file path not passed in, get prompt user to select in file explorer
             filePath = GetFilePath();
         }
 
-        IEventLog ILogHandler.GetLog()
+        // factory method implementation
+        IEventLog IEventLogGetter.GetLog()
         {
             // read file
             List<DexcomClarityEvent> events = ReadFile(filePath);
 
-            // return event log
+            // return as event log
             return new DexcomClarityExport(events);
         }
 
-        // open file explore for user to select input file, return file path
+        // prompts user to select from file explorer, return file path
         private static string GetFilePath()
         {
             string filePath = "";
@@ -60,6 +62,7 @@ namespace Endo.IO
         }
     }
 
+    // maps csv columns to ClarityEvent properties
     internal class ClarityEventMap : ClassMap<DexcomClarityEvent>
     {
         public ClarityEventMap()

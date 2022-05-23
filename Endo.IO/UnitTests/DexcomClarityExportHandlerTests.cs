@@ -11,7 +11,7 @@ namespace Endo.IO.Testing
         [Test]
         public void ReadFileOnProperlyFormattedFileReturnsListOfEvents()
         {
-            ILogHandler logHandler = new DexcomClarityExportHandler(Path.Combine(
+            IEventLogGetter logHandler = new DexcomClarityExportReader(Path.Combine(
                 Environment.CurrentDirectory,
                 @"Endo.IO\Resources\",
                 "SampleClarityExport_Cleaned.csv"));
@@ -21,7 +21,7 @@ namespace Endo.IO.Testing
         [Test]
         public void ReadFileOnImproperlyFormattedFileThrowsCsvHelperReaderException()
         {
-            ILogHandler logHandler = new DexcomClarityExportHandler(Path.Combine(
+            IEventLogGetter logHandler = new DexcomClarityExportReader(Path.Combine(
                 Environment.CurrentDirectory,
                 @"Endo.IO\Resources\",
                 "SampleClarityExport_Uncleaned.csv"));

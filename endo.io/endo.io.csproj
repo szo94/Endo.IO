@@ -85,13 +85,13 @@
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Data\DexcomClarityExport.cs" />
     <Compile Include="Data\DexcomClarityEvent.cs" />
-    <Compile Include="Data\DexcomClarityExportHandler.cs" />
+    <Compile Include="Data\DexcomClarityExportReader.cs" />
     <Compile Include="Data\DataClasses.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataClasses.dbml</DependentUpon>
     </Compile>
-    <Compile Include="Data\ILogHandler.cs" />
+    <Compile Include="Data\IEventLogGetter.cs" />
     <Compile Include="Data\IEventLog.cs" />
     <Compile Include="Data\LinqToSqlDatabaseConnection.cs" />
     <Compile Include="Data\DatabaseConnection.cs" />

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Endo.IO.Data;
 using static Endo.IO.Constants.Constants;
 
@@ -8,12 +7,12 @@ namespace Endo.IO
 {
     internal class Program
     {
-        // get reference to database connection
-        static readonly LinqToSqlDatabaseConnection db = LinqToSqlDatabaseConnection.Instance;
-
         [STAThread]
         private static void Main()
         {
+            // get reference to database connection
+            LinqToSqlDatabaseConnection db = LinqToSqlDatabaseConnection.Instance;
+
             // prompt user for username
             Console.WriteLine("Welcome to Endo.IO!\n");
             Console.Write("Enter username: ");
@@ -38,7 +37,7 @@ namespace Endo.IO
             UserProfile profile = db.GetUserProfile(userName);
 
             // attempt to read and process file
-            ILogHandler logHandler = new DexcomClarityExportHandler();
+            IEventLogGetter logHandler = new DexcomClarityExportReader();
             try
             {
                 // get log

@@ -1,6 +1,6 @@
 ﻿namespace Endo.IO.Data
 {
-    internal interface ILogHandler
+    internal interface IEventLogGetter
     {
         internal IEventLog GetLog();
     }
