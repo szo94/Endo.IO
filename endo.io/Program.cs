@@ -40,7 +40,7 @@ namespace Endo.IO
             UserProfile profile = db.GetUserProfile(userName);
 
             // get file path for input file
-            string filePath = OpenFileDialog();
+            string filePath = GetFilePath();
 
             // attempt to read and process file
             ClarityExportReader reader = new ClarityExportReader(filePath);
@@ -66,7 +66,7 @@ namespace Endo.IO
         }
 
         // open file explore for user to select input file, return file path
-        private static string OpenFileDialog()
+        private static string GetFilePath()
         {
             string filePath = "";
             OpenFileDialog ofd = new OpenFileDialog();
