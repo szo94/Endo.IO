@@ -7,5 +7,16 @@ namespace Endo.IO.Data
         public int Index { get; set; }
         public DateTime Timestamp { get; set; }
         public int GlucoseValue { get; set; }
+
+        public Event()
+        {
+        }
+
+        public Event(int index, DateTime timestamp, int glucoseValue   )
+        {
+            Index = index;
+            Timestamp = timestamp;
+            GlucoseValue = glucoseValue;
+        }
     }
 }

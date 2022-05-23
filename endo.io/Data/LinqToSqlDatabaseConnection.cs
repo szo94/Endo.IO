@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using endo.io;
 
 namespace Endo.IO.Data
 {
     internal class LinqToSqlDatabaseConnection : DatabaseConnection<LinqToSqlDatabaseConnection>
     {
-        private DataClasses1DataContext db = new DataClasses1DataContext();
+        private readonly DataClassesDataContext db = new DataClassesDataContext();
 
         // check that username exists in database
         public override bool UserExists(string userName)
