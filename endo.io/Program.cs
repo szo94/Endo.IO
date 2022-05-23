@@ -11,7 +11,7 @@ namespace Endo.IO
     internal class Program
     {
         // get reference to database connection
-        static LinqToSqlDatabaseConnection db = LinqToSqlDatabaseConnection.Instance;
+        static readonly LinqToSqlDatabaseConnection db = LinqToSqlDatabaseConnection.Instance;
 
         [STAThread]
         private static void Main()
@@ -20,7 +20,7 @@ namespace Endo.IO
             Console.WriteLine("Welcome to Endo.IO!\n");
             Console.Write("Enter username: ");
             string userName = Console.ReadLine();
-            while (!db.UserExists(userName))
+            while (userName == "" || !db.UserExists(userName))
             {
                 Console.Write("User not found.\nPlease enter a valid username: ");
                 userName = Console.ReadLine();
@@ -72,7 +72,7 @@ namespace Endo.IO
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Title = "Open Clarity Export";
             ofd.InitialDirectory =
-                Path.Combine(Assembly.GetExecutingAssembly().Location, @"..\..\..\TestFiles");
+                Path.Combine(Assembly.GetExecutingAssembly().Location, @"..\..\..\Resources");
             ofd.Filter = "CSV Files |*.csv";
             if (ofd.ShowDialog() == DialogResult.OK)
             {

@@ -1,9 +1,8 @@
 ﻿using NUnit.Framework;
-using Endo.IO;
 using System;
 using System.IO;
 
-namespace endo.io.Testing
+namespace Endo.IO.Testing
 {
     [TestFixture]
     public class ClarityExportReaderTests
@@ -13,7 +12,7 @@ namespace endo.io.Testing
         {
             ClarityExportReader reader = new ClarityExportReader(Path.Combine(
                 Environment.CurrentDirectory,
-                @"endo.io\UnitTests\",
+                @"Endo.IO\Resources\",
                 "SampleClarityExport_Cleaned.csv"));
             Assert.IsNotEmpty(reader.ReadFile());
         }
@@ -23,7 +22,7 @@ namespace endo.io.Testing
         {
             ClarityExportReader reader = new ClarityExportReader(Path.Combine(
                 Environment.CurrentDirectory,
-                @"endo.io\UnitTests\",
+                @"Endo.IO\Resources\",
                 "SampleClarityExport_Uncleaned.csv"));
             Assert.Throws<CsvHelper.ReaderException>(() => reader.ReadFile());
         }

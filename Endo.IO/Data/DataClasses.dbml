@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Endo.IO" Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=LAPTOP-I24G5ABK\SQLEXPRESS;Initial Catalog=Endo.IO;Integrated Security=True" SettingsObjectName="endo.io.Properties.Settings" SettingsPropertyName="Endo_IOConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=LAPTOP-I24G5ABK\SQLEXPRESS;Initial Catalog=Endo.IO;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False" SettingsObjectName="Endo.IO.Properties.Settings" SettingsPropertyName="Endo_IOConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.BasalRates" Member="BasalRates">
     <Type Name="BasalRate">
       <Column Name="Hour" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
