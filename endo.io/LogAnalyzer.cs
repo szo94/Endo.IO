@@ -15,6 +15,7 @@ namespace Endo.IO
         public double[] AverageByHour { get; private set; }
         public double[] VarianceByHour { get; private set; }
         public double[] BasalSuggestions { get; private set; }
+        public double GMI { get; private set; }
 
         public LogAnalyzer(UserProfile profile, IEventLog eventLog)
         {
@@ -31,6 +32,7 @@ namespace Endo.IO
             AverageByHour       = GetAverageByHour();
             VarianceByHour      = GetVarianceByHour(AverageByHour);
             BasalSuggestions    = GetBasalSuggestions(VarianceByHour);
+            GMI                 = GetGMI();
         }
 
         private double[] GetAverageByHour()
@@ -58,6 +60,11 @@ namespace Endo.IO
             }
 
             return basalSuggestions;
+        }
+
+        private double GetGMI()
+        {
+            return 3.31 + 0.02392 * EventLog.Average(e => e.GlucoseValue);
         }
     }
 }

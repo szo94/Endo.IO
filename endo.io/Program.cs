@@ -71,6 +71,7 @@ namespace Endo.IO
             Console.WriteLine($"Number of Readings:{analyzer.EventLog.Count,8}");
             Console.WriteLine($"Average BG:{analyzer.AverageBG,16:F}");
             Console.WriteLine($"Time In Range:{analyzer.TimeInRange,13:P1}");
+            Console.WriteLine($"GMI: {analyzer.GMI, 22:F1}");
         }
 
         // print graph row to console specifying row name, data, and cell format
