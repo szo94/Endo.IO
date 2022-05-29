@@ -47,7 +47,7 @@ namespace Endo.IO
                 LogAnalyzer analyzer = new LogAnalyzer(profile, eventLog);
 
                 // print results
-                PrintResultsGraph(profile, analyzer);
+                PrintResultsTable(profile, analyzer);
             }
             catch (Exception ex)
             {
@@ -58,9 +58,10 @@ namespace Endo.IO
             Console.ReadKey();        
         }
         
-        // print results in the form of a graph to console
-        private static void PrintResultsGraph(UserProfile profile, LogAnalyzer analyzer)
+        // print results in the form of a table to console
+        private static void PrintResultsTable(UserProfile profile, LogAnalyzer analyzer)
         {
+            Console.SetWindowSize(182,35);
             PrintRow("", HEADERS, v => $"{v,COL_WIDTH}");
             Console.WriteLine(new string('-', 24 * COL_WIDTH + 13));
             PrintRow("Average", analyzer.AverageByHour, v => $"{v,COL_WIDTH:F1}");
