@@ -61,6 +61,7 @@ namespace Endo.IO
         // print results in the form of a graph to console
         private static void PrintResultsGraph(UserProfile profile, LogAnalyzer analyzer)
         {
+            Console.SetWindowSize(182,35);
             PrintRow("", HEADERS, v => $"{v,COL_WIDTH}");
             Console.WriteLine(new string('-', 24 * COL_WIDTH + 13));
             PrintRow("Average", analyzer.AverageByHour, v => $"{v,COL_WIDTH:F1}");
