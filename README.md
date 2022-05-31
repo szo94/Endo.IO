@@ -1,4 +1,4 @@
-# endo.io
+# Endo.IO
 A smart insulin basal rate optimization assistant
 
 ## What is basal insulin therapy?
