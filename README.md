@@ -12,6 +12,6 @@ Historically, changes to basal rates are infrequent occurences suggested by endo
 This project aims to build a smart assistant which will examine recent blood glucose data and suggest changes to current basal rates and/or bolusing ratios.
 
 ## Project Status
-In its current, preliminary form, the program reads in a CSV formatted as a Dexcom Clarity export and prints results to the console. I aim to eventually translate the project into Node and create a React front-end, though I am still working to familiarize myself with both of those libraries. I also intend to introduce a call to the Dexcom API to allow for automatic, bi-weekly email prompts.
+At present, the program reads in a Dexcom Clarity export in the form of a cleaned CSV and prints results to the console. I am working on a REST client to pull data directly from Dexcom and other CGM data providers to allow for automatic, bi-weekly email prompts.
 
-In addition, I am working with a pair of clinical endocrinologists to define common clinical approaches to hone and expand the tool's capabilities, as well as to devise an effective model of interaction.
+In addition, I am working with a clinical endocrinologist to define common clinical approaches and develop strategies for treatment customization.
